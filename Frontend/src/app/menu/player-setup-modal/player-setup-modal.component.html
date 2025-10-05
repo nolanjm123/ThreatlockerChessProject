@@ -1,0 +1,26 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2>Enter Player Names</h2>
+
+    <div class="player-input">
+      <label>Player 1:</label>
+      <input type="text" [(ngModel)]="player1" (input)="filterPlayers1()" (blur)="hideDropdown(1)" autocomplete="off">
+      <ul *ngIf="filteredPlayers1.length > 0" class="dropdown">
+        <li *ngFor="let p of filteredPlayers1" (click)="selectPlayer1(p)">{{ p }}</li>
+      </ul>
+    </div>
+
+    <div class="player-input">
+      <label>Player 2:</label>
+      <input type="text" [(ngModel)]="player2" (input)="filterPlayers2()" (blur)="hideDropdown(2)" autocomplete="off">
+      <ul *ngIf="filteredPlayers2.length > 0" class="dropdown">
+        <li *ngFor="let p of filteredPlayers2" (click)="selectPlayer2(p)">{{ p }}</li>
+      </ul>
+    </div>
+
+    <div class="modal-buttons">
+      <button (click)="onStart()">Start Game</button>
+      <button (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</div>

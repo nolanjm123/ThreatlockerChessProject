@@ -1,6 +1,30 @@
-<!-- <p>menu works!</p> -->
-
-
-<h1>Chess Menu</h1>
+<!-- <h1>Chess Menu</h1>
 <button (click)="startGame()">Start Game</button>
-<!-- Add more options here: Scores, Themes, etc. -->
+ -->
+
+
+<div class="menu-container">
+<div class="top-right-icons">
+  <button class="icon-btn">
+  <img src="assets/settings.svg" alt="Settings">
+</button>
+<button class="icon-btn">
+  <img src="assets/user_icons.svg" alt="User">
+</button>
+</div>
+
+
+  <h1>Chess Game</h1>
+  <h2>Created by Nolan Metcalf</h2>
+
+  <div class="menu-buttons">
+    <button class="menu-btn" (click)="openNewGameModal()">New Game</button>
+    <button class="menu-btn">History</button>
+  </div>
+  </div>
+
+  <app-player-setup-modal
+    *ngIf="showNewGameModal"
+    (closeModal)="closeNewGameModal()"
+    (start)="startGame($event)"
+  ></app-player-setup-modal>

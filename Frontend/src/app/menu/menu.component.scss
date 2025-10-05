@@ -1,0 +1,108 @@
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // horizontal centering
+  text-align: center;
+  position: relative;
+  padding-top: 80px; // bring headers closer to top
+}
+
+h1 {
+  font-size: 4rem; // bigger title
+  margin: 0.5rem 0;
+}
+
+h2 {
+  font-size: 2rem; // bigger subtitle
+  margin-bottom: 2rem; // space before buttons
+  font-weight: 400;
+  color: #555;
+}
+
+.menu-buttons {
+  display: flex;
+  gap: 5rem; // more space between buttons
+  margin-top: 3rem; // pushes buttons down a bit
+}
+
+.menu-btn {
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+}
+
+.top-right-icons {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 1rem;
+
+  i {
+    font-size: 2rem;
+    cursor: pointer;
+  }
+}
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 350px;
+}
+
+.modal h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.menu-btn.cancel {
+  background-color: #dc3545;
+
+  &:hover {
+    background-color: #b02a37;
+  }
+}

@@ -12,6 +12,7 @@ Frontend/dist/
 Frontend/node_modules/
 Backend/node_modules/
 Frontend/.angular/cache/
+Frontend/angular/cache/
 npm-debug.log
 yarn-error.log
 

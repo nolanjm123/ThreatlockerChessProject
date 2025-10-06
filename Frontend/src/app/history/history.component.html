@@ -1,0 +1,54 @@
+<div class="history-container">
+  <!-- Top bar -->
+  <div class="top-bar">
+    <button class="icon-btn back-btn" (click)="goBack()">
+      <img src="assets/back_arrow.svg" alt="Back">
+    </button>
+
+    <div class="top-right-icons">
+      <button class="icon-btn">
+        <img src="assets/settings.svg" alt="Settings">
+      </button>
+      <button class="icon-btn">
+        <img src="assets/user_icon.svg" alt="User">
+      </button>
+    </div>
+  </div>
+
+  <!-- Toggle buttons -->
+  <div class="toggle-buttons">
+    <button 
+      [class.active]="selectedView === 'history'" 
+      (click)="selectView('history')">
+      History
+    </button>
+    <button 
+      [class.active]="selectedView === 'leaderboard'" 
+      (click)="selectView('leaderboard')">
+      Leaderboard
+    </button>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <!-- History view -->
+    <div *ngIf="selectedView === 'history'" class="match-list">
+      <div class="match-card" *ngFor="let match of matches">
+        <div class="match-info">
+          <h3>{{ match.player1 }} vs. {{ match.player2 }}</h3>
+          <p>{{ match.startTime | date:'medium' }}</p>
+          <p *ngIf="match.isConcluded">Winner: {{ match.winner }}</p>
+          <p *ngIf="!match.isConcluded">In Progress</p>
+        </div>
+        <button class="play-btn" (click)="handleMatchClick(match)">
+          ▶
+        </button>
+      </div>
+    </div>
+
+    <!-- Leaderboard view -->
+    <div *ngIf="selectedView === 'leaderboard'" class="leaderboard">
+      <p>Leaderboard coming soon...</p>
+    </div>
+  </div>
+</div>

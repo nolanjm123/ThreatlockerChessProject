@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -25,12 +25,16 @@ export class MenuPage {
     this.closeNewGameModal();
     this.router.navigate(['/game']);
   }
+
+  openHistoryPage() {
+    this.router.navigate(['/history']);
+    // Database fetch
+  }
   
 
   openNewGameModal() {
     this.showNewGameModal = true;
     // Database fetch
-
   }
 
   closeNewGameModal() {

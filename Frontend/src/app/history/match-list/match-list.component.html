@@ -1,0 +1,23 @@
+<h2>Matches</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Match ID</th>
+      <th>Player 1</th>
+      <th>Player 2</th>
+      <th>Winner</th>
+      <th>Start</th>
+      <th>End</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let match of matches" (click)="selectMatch(match.MatchID)">
+      <td>{{ match.MatchID }}</td>
+      <td>{{ match.Player1ID }}</td>
+      <td>{{ match.Player2ID }}</td>
+      <td>{{ match.WinnerID || 'Ongoing' }}</td>
+      <td>{{ match.StartTime | date:'short' }}</td>
+      <td>{{ match.EndTime ? (match.EndTime | date:'short') : 'Ongoing' }}</td>
+    </tr>
+  </tbody>
+</table>

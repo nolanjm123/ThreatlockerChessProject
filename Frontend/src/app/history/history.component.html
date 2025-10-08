@@ -1,5 +1,4 @@
 <div class="history-container">
-  <!-- Top bar -->
   <div class="top-bar">
     <button class="icon-btn back-btn" (click)="goBack()">
       <img src="assets/back_arrow.svg" alt="Back">
@@ -15,40 +14,61 @@
     </div>
   </div>
 
-  <!-- Toggle buttons -->
   <div class="toggle-buttons">
-    <button 
-      [class.active]="selectedView === 'history'" 
-      (click)="selectView('history')">
-      History
-    </button>
-    <button 
-      [class.active]="selectedView === 'leaderboard'" 
-      (click)="selectView('leaderboard')">
-      Leaderboard
-    </button>
+    <button [class.active]="selectedView === 'history'" (click)="selectView('history')">History</button>
+    <button [class.active]="selectedView === 'leaderboard'" (click)="selectView('leaderboard')">Leaderboard</button>
   </div>
 
-  <!-- Main content -->
+
+  <!-- Player filter -->
+<div class="player-filter">
+  <label for="playerFilterInput">Filter by Player:</label>
+  <input
+    id="playerFilterInput"
+    type="text"
+    [(ngModel)]="filterInput"
+    (input)="onFilterInputChange()"
+    placeholder="Type a player name..."
+    autocomplete="off"
+  />
+
+  <!-- Suggestions list -->
+  <ul *ngIf="filteredPlayerSuggestions.length > 0" class="suggestions-dropdown">
+    <li
+      *ngFor="let player of filteredPlayerSuggestions"
+      class="suggestion-item"
+      (click)="selectPlayer(player)"
+    >
+      {{ player.username }}
+    </li>
+  </ul>
+</div>
+
+
   <div class="content">
     <!-- History view -->
     <div *ngIf="selectedView === 'history'" class="match-list">
-      <div class="match-card" *ngFor="let match of matches">
+      <p *ngIf="loadingMatches">Loading matches...</p>
+      <div class="match-card" *ngFor="let match of matchesFilteredByPlayer">
         <div class="match-info">
-          <h3>{{ match.player1 }} vs. {{ match.player2 }}</h3>
+          <h3>{{ getPlayerName(match.player1ID) }} vs. {{ getPlayerName(match.player2ID) }}</h3>
           <p>{{ match.startTime | date:'medium' }}</p>
-          <p *ngIf="match.isConcluded">Winner: {{ match.winner }}</p>
-          <p *ngIf="!match.isConcluded">In Progress</p>
+          <p *ngIf="match.endTime">Winner: {{ getPlayerName(match.winnerID) }}</p>
+          <p *ngIf="!match.endTime">In Progress</p>
         </div>
-        <button class="play-btn" (click)="handleMatchClick(match)">
-          ▶
-        </button>
+        <button class="play-btn" (click)="handleMatchClick(match)">▶</button>
       </div>
+      <p *ngIf="!loadingMatches && matches.length === 0">No matches found.</p>
     </div>
 
     <!-- Leaderboard view -->
     <div *ngIf="selectedView === 'leaderboard'" class="leaderboard">
-      <p>Leaderboard coming soon...</p>
+      <p *ngIf="loadingLeaderboard">Loading leaderboard...</p>
+      <div *ngFor="let player of leaderboard" class="player-card">
+        <h3>{{ player.username }}</h3>
+        <p>Wins: {{ player.wins }} | Draws: {{ player.draws }} | Losses: {{ player.losses }}</p>
+      </div>
+      <p *ngIf="!loadingLeaderboard && leaderboard.length === 0">No players found.</p>
     </div>
   </div>
 </div>

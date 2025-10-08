@@ -110,3 +110,44 @@
   font-style: italic;
   color: #777;
 }
+
+
+.player-filter {
+  position: relative;
+  width: 250px; // adjust as needed
+
+  input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .suggestions-dropdown {
+    position: absolute;
+    top: 100%; // directly below the input
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid #ccc;
+    border-top: none; // remove double border
+    border-radius: 0 0 4px 4px;
+    background: white;
+    z-index: 10; // make sure it sits above other content
+
+    .suggestion-item {
+      padding: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+    }
+  }
+}

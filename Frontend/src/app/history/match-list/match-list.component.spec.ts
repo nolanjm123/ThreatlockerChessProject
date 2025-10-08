@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HistoryPage } from './history.component';
+import { MatchListComponent } from './match-list.component';
 
-describe('HistoryPage', () => {
-  let component: HistoryPage;
-  let fixture: ComponentFixture<HistoryPage>;
+describe('MatchListComponent', () => {
+  let component: MatchListComponent;
+  let fixture: ComponentFixture<MatchListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HistoryPage]
+      imports: [MatchListComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(HistoryPage);
+    fixture = TestBed.createComponent(MatchListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

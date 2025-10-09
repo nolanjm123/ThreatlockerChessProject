@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/apiservice.service';
 import { PlayerSetupModalComponent } from './player-setup-modal/player-setup-modal.component';
+import { Player } from '../models/player.model';
 
 @Component({
   selector: 'app-menu',
@@ -14,6 +15,8 @@ import { PlayerSetupModalComponent } from './player-setup-modal/player-setup-mod
 })
 export class MenuPage {
   showNewGameModal = false;
+  players: Player[] = [];
+  playersMap: Map<number, string> = new Map();
   player1 = "";
   player2 = "";
 
@@ -34,10 +37,26 @@ export class MenuPage {
 
   openNewGameModal() {
     this.showNewGameModal = true;
-    // Database fetch
+    this.fetchPlayers();
   }
 
   closeNewGameModal() {
     this.showNewGameModal = false;
   }
+
+  private fetchPlayers() {
+  this.apiService.getPlayers().subscribe({
+    next: (players: Player[]) => {
+      console.log('Players received from API:', players);
+      this.players = players;
+
+      // players.forEach(p => {
+      //   this.playersMap.set(p.playerID, p.username);
+      // });
+    },
+    error: (err) => {
+      console.error('Error fetching players', err);
+    }
+  });
+}
 }

@@ -25,6 +25,7 @@
 
   <app-player-setup-modal
     *ngIf="showNewGameModal"
+    [allPlayers]="players"
     (closeModal)="closeNewGameModal()"
     (start)="startGame($event)"
   ></app-player-setup-modal>

@@ -1,7 +1,8 @@
 // player-setup-modal.component.ts
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Player } from '../../models/player.model';
 
 @Component({
   selector: 'app-player-setup-modal',
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./player-setup-modal.component.scss']
 })
 export class PlayerSetupModalComponent {
+  @Input() allPlayers: Player[] = [];
   @Output() closeModal = new EventEmitter<void>();
   @Output() start = new EventEmitter<{player1: string, player2: string}>();
 
@@ -18,9 +20,9 @@ export class PlayerSetupModalComponent {
   player2 = '';
 
   // Temp database
-  allPlayers = ['Max', 'Maximus', 'Greg', 'Alice', 'Bob', 'bobbyboy'];
-  filteredPlayers1: string[] = [];
-  filteredPlayers2: string[] = [];
+  //allPlayers = ['Max', 'Maximus', 'Greg', 'Alice', 'Bob', 'bobbyboy'];
+  filteredPlayers1: Player[] = [];
+  filteredPlayers2: Player[] = [];
 
   onStart() {
     if (!this.player1) {
@@ -44,25 +46,25 @@ export class PlayerSetupModalComponent {
 
   filterPlayers1() {
     const query = this.player1.toLowerCase();
-    this.filteredPlayers1 = this.allPlayers.filter(name =>
-      name.toLowerCase().startsWith(query)
+    this.filteredPlayers1 = this.allPlayers.filter(p =>
+      p.username.toLowerCase().startsWith(query)
     );
   }
 
   filterPlayers2() {
     const query = this.player2.toLowerCase();
-    this.filteredPlayers2 = this.allPlayers.filter(name =>
-      name.toLowerCase().startsWith(query)
+    this.filteredPlayers2 = this.allPlayers.filter(p =>
+      p.username.toLowerCase().startsWith(query)
     );
   }
 
-  selectPlayer1(name: string) {
-    this.player1 = name;
+  selectPlayer1(player: Player) {
+    this.player1 = player.username;
     this.filteredPlayers1 = [];
   }
 
-  selectPlayer2(name: string) {
-    this.player2 = name;
+  selectPlayer2(player: Player ) {
+    this.player2 = player.username;
     this.filteredPlayers2 = [];
   }
 

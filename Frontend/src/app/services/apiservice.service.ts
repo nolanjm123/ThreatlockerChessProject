@@ -18,6 +18,10 @@ export class ApiService {
     return this.http.get<Player>(`${this.baseUrl}/player/${id}`);
   }
 
+  getPlayers(): Observable<Player[]> {
+    return this.http.get<Player[]>(`${this.baseUrl}/players/`);
+  }
+
   createPlayer(name: string): Observable<{ PlayerID: number }> {
     return this.http.post<{ PlayerID: number }>(`${this.baseUrl}/player`, null, {
       params: { name }

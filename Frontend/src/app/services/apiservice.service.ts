@@ -22,10 +22,8 @@ export class ApiService {
     return this.http.get<Player[]>(`${this.baseUrl}/players`);
   }
 
-  createPlayer(name: string): Observable<{ PlayerID: number }> {
-    return this.http.post<{ PlayerID: number }>(`${this.baseUrl}/player`, null, {
-      params: { name }
-    });
+  createPlayer(name: string): Observable<{ playerID: number }> {
+    return this.http.post<{ playerID: number }>(`${this.baseUrl}/player?name=${encodeURIComponent(name)}`, {});
   }
 
   // Matches
@@ -37,10 +35,11 @@ export class ApiService {
     return this.http.get<Match[]>(`${this.baseUrl}/matches`);
   }
 
-  createMatch(player1Id: number, player2Id: number): Observable<{ MatchID: number }> {
-    return this.http.post<{ MatchID: number }>(`${this.baseUrl}/match`, null, {
-      params: { player1Id, player2Id }
-    });
+  createMatch(player1Id: number, player2Id: number): Observable<{ matchID: number }> {
+    return this.http.post<{ matchID: number }>(
+      `${this.baseUrl}/match?player1Id=${player1Id}&player2Id=${player2Id}`,
+      {}
+    );
   }
 
   getMovesForMatch(matchId: number): Observable<Move[]> {

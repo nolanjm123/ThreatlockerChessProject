@@ -1,31 +1,23 @@
-<div class="game-container" [ngClass]="'theme-' + currentTheme">
-  <h2>Chess Game</h2>
-  <div class="board">
-    <div class="rank" *ngFor="let rank of [7,6,5,4,3,2,1,0]; let rankIndex = index">
-      <div class="square"
-           *ngFor="let file of [0,1,2,3,4,5,6,7]; let fileIndex = index"
-           [ngClass]="{
-             'light': (rank + file) % 2 === 0,
-             'dark': (rank + file) % 2 !== 0,
-             'selected': selectedSquare?.rank === rank && selectedSquare?.file === file
-           }"
-           (click)="onSquareClick(rank, file)">
-        <span class="piece">{{ getPieceSymbol(board[rank][file]) }}</span>
-      </div>
+<div class="board" *ngIf="board?.length === 8 && board[0]?.length === 8">
+  <div class="row" *ngFor="let row of board; let rank = index">
+    <div
+      class="square"
+      *ngFor="let piece of row; let file = index"
+      [ngClass]="{
+        'light-square': (rank + file) % 2 === 0,
+        'dark-square': (rank + file) % 2 !== 0,
+        'selected': selectedSquare && selectedSquare.rank === rank && selectedSquare.file === file
+      }"
+      (click)="onSquareClick(rank, file)"
+    >
+      <span class="piece">{{ getPieceSymbol(board[rank][file]) }}</span>
     </div>
   </div>
-  <div class="labels files">
-    <span *ngFor="let file of ['a','b','c','d','e','f','g','h']">{{ file }}</span>
-  </div>
-  <div class="labels ranks">
-    <span *ngFor="let rank of [8,7,6,5,4,3,2,1]">{{ rank }}</span>
-  </div>
-  <p>{{ status }}</p>
-  <p *ngIf="error" class="error">{{ error }}</p>
-  <button (click)="startNewGame()">New Game</button>
-  <button (click)="backToMenu()">Back to Menu</button>
-  <select (change)="onThemeChange($event)">
-    <option value="default">Default Theme</option>
-    <option value="dark">Dark Theme</option>
-  </select>
 </div>
+<div *ngIf="error" class="error">{{ error }}</div>
+<div class="status">{{ status }}</div>
+<select (change)="onThemeChange($event)">
+  <option value="default">Default Theme</option>
+  <option value="dark">Dark Theme</option>
+</select>
+<button (click)="backToMenu()">Back to Menu</button>

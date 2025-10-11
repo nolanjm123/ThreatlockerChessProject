@@ -23,18 +23,18 @@ export class MenuPage {
   constructor(private router: Router, private apiService: ApiService) {}
 
 
-  startGame(event: { player1: string; player2: string }) {
-    console.log('Starting game with:', event.player1, event.player2);
+  startGame(players: { player1: string, player2: string }) {
+    console.log('Navigating to game with players:', players.player1, players.player2);
+    this.router.navigate(['/game'], {
+      state: { player1: players.player1.trim(), player2: players.player2.trim() }
+    });
     this.closeNewGameModal();
-    this.router.navigate(['/game']);
   }
 
   openHistoryPage() {
     this.router.navigate(['/history']);
-    // Database fetch
   }
   
-
   openNewGameModal() {
     this.showNewGameModal = true;
     this.fetchPlayers();
@@ -49,10 +49,6 @@ export class MenuPage {
     next: (players: Player[]) => {
       console.log('Players received from API:', players);
       this.players = players;
-
-      // players.forEach(p => {
-      //   this.playersMap.set(p.playerID, p.username);
-      // });
     },
     error: (err) => {
       console.error('Error fetching players', err);

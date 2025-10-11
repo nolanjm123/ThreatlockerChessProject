@@ -16,7 +16,17 @@ Frontend/angular/cache/
 npm-debug.log
 yarn-error.log
 
+# Backend
+Backend/bin/
+Backend/obj/
+Backend/obj/Debug
+Backend/obj/debug
+Backend/ChessBackend/bin/
+Backend/ChessBackend/obj/
+
+
 # IDEs and editors
+.vs/
 .idea/
 .project
 .classpath
@@ -43,6 +53,7 @@ testem.log
 /typings
 Frontend/src/environments/*.ts
 Backend/src/environments/*.ts
+Devlog/
 
 # System files
 .DS_Store

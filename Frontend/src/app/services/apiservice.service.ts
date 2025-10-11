@@ -19,7 +19,7 @@ export class ApiService {
   }
 
   getPlayers(): Observable<Player[]> {
-    return this.http.get<Player[]>(`${this.baseUrl}/players/`);
+    return this.http.get<Player[]>(`${this.baseUrl}/players`);
   }
 
   createPlayer(name: string): Observable<{ PlayerID: number }> {
@@ -29,8 +29,8 @@ export class ApiService {
   }
 
   // Matches
-  getMatch(): Observable<Match[]> {
-    return this.http.get<Match[]>(`${this.baseUrl}/match`); // NEED TO ADD MATCHID AT END OF URL
+  getMatch(matchId: number): Observable<Match> {
+    return this.http.get<Match>(`${this.baseUrl}/match/${matchId}`); // NEED TO ADD MATCHID AT END OF URL
   }
 
   getMatches(): Observable<Match[]> {
@@ -45,6 +45,10 @@ export class ApiService {
 
   getMovesForMatch(matchId: number): Observable<Move[]> {
     return this.http.get<Move[]>(`${this.baseUrl}/match/${matchId}/moves`);
+  }
+
+  sendMove(matchId: number, move: { fromSquare: string; toSquare: string; promotion?: string, playerID: number}): Observable<Move> {
+    return this.http.post<Move>(`${this.baseUrl}/move`, { matchId, ...move });
   }
 
   updateMatchWinner(matchId: number, winnerId: number): Observable<void> {

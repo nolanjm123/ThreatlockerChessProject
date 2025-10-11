@@ -5,4 +5,5 @@ export interface Match {
   winnerID?: number;
   startTime: Date;
   endTime?: Date;
+  currentFEN?: string;
 }

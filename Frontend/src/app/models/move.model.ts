@@ -8,4 +8,5 @@ export interface Move {
   toSquare?: string;
   capturedPiece?: string;
   timeStamp: Date;
+  resultingFEN?: string;
 }

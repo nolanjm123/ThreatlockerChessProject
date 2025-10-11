@@ -53,7 +53,12 @@
         <div class="match-info">
           <h3>{{ getPlayerName(match.player1ID) }} vs. {{ getPlayerName(match.player2ID) }}</h3>
           <p>{{ match.startTime | date:'medium' }}</p>
-          <p *ngIf="match.endTime">Winner: {{ getPlayerName(match.winnerID) }}</p>
+          <p *ngIf="match.endTime">
+              <ng-container *ngIf="match.winnerID; else drawResult">
+                Winner: {{ getPlayerName(match.winnerID) }}
+              </ng-container>
+              <ng-template #drawResult>Draw</ng-template>
+            </p>
           <p *ngIf="!match.endTime">In Progress</p>
         </div>
         <button class="play-btn" (click)="handleMatchClick(match)">▶</button>

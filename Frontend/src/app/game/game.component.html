@@ -1,23 +1,32 @@
-<div class="board" *ngIf="board?.length === 8 && board[0]?.length === 8">
-  <div class="row" *ngFor="let row of board; let rank = index">
-    <div
-      class="square"
-      *ngFor="let piece of row; let file = index"
-      [ngClass]="{
-        'light-square': (rank + file) % 2 === 0,
-        'dark-square': (rank + file) % 2 !== 0,
-        'selected': selectedSquare && selectedSquare.rank === rank && selectedSquare.file === file
-      }"
-      (click)="onSquareClick(rank, file)"
-    >
-      <span class="piece">{{ getPieceSymbol(board[rank][file]) }}</span>
-    </div>
+<div class="top-bar">
+  <button class="icon-btn back-btn" (click)="backToMenu()" title="Back to Menu">
+    <img src="assets/back_arrow.svg" alt="Back to Menu"/>
+  </button>
+  <div class="top-right-icons">
+    <button class="icon-btn" title="Settings">
+      <img src="assets/settings.svg" alt="Settings" />
+    </button>
+    <button class="icon-btn" title="User">
+      <img src="assets/user_icon.svg" alt="User" />
+    </button>
   </div>
 </div>
-<div *ngIf="error" class="error">{{ error }}</div>
-<div class="status">{{ status }}</div>
-<select (change)="onThemeChange($event)">
-  <option value="default">Default Theme</option>
-  <option value="dark">Dark Theme</option>
-</select>
-<button (click)="backToMenu()">Back to Menu</button>
+<div class="game-container">
+  <app-player-management
+    [player1]="player1"
+    [player2]="player2"
+    (playerIdsResolved)="onPlayerIdsResolved($event)"
+    (error)="onError($event)"
+  ></app-player-management>
+  <app-chess-board
+    [currentMatchId]="currentMatchId"
+    [player1Id]="player1Id"
+    [player2Id]="player2Id"
+    [player1]="player1"
+    [player2]="player2"
+    (statusChange)="onStatusChange($event)"
+    [currentTheme]="currentTheme"
+    (themeChange)="onThemeChange($event)"
+  ></app-chess-board>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</div>

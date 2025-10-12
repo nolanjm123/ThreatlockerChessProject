@@ -43,7 +43,7 @@ export class FenHelper {
     const fenRows = this.getFen().split(' ')[0].split('/');
     for (let rank = 0; rank < 8; rank++) {
       let file = 0;
-      for (const char of fenRows[rank]) {
+      for (const char of fenRows[7-rank]) {
         if (/[1-8]/.test(char)) {
           file += parseInt(char); // Skip empty squares
         } else if (/[rnbqkpRNBQKP]/.test(char)) {

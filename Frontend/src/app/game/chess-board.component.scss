@@ -1,0 +1,101 @@
+.board-container {
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center horizontally */
+}
+
+.board {
+  display: grid;
+  grid-template-rows: repeat(8, 50px);
+  width: 400px;
+  height: 400px;
+  border: 2px solid #000;
+  box-sizing: border-box;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, 50px);
+}
+
+.square {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.labels.files {
+  display: flex;
+  width: 400px;
+  justify-content: space-around;
+  margin-top: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.labels.ranks {
+  position: absolute;
+  left: -30px;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  justify-content: space-around;
+  font-size: 14px;
+  text-align: right;
+}
+
+.square.selected {
+  background-color: rgba(255, 255, 0, 0.5);
+}
+
+.square:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.piece {
+  user-select: none;
+}
+
+.error {
+  color: red;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.status {
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Default theme */
+.default .light-square {
+  background-color: #f0d9b5;
+}
+.default .dark-square {
+  background-color: #b58863;
+}
+.default {
+  background-color: #f5f5f5;
+}
+
+/* Dark theme */
+.dark .light-square {
+  background-color: #4b7399;
+}
+.dark .dark-square {
+  background-color: #3a5a7a;
+}
+.dark {
+  background-color: #333;
+}
+.dark .error,
+.dark .status {
+  color: #fff;
+}

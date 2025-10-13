@@ -1,8 +1,8 @@
 .board-container {
   position: relative;
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  align-items: center; /* Center horizontally */
+  flex-direction: column;
+  align-items: center;
 }
 
 .board {
@@ -28,15 +28,34 @@
   font-size: 32px;
   cursor: pointer;
   box-sizing: border-box;
+  position: relative;
 }
 
-.labels.files {
-  display: flex;
-  width: 400px;
-  justify-content: space-around;
-  margin-top: 5px;
-  font-size: 14px;
-  text-align: center;
+.square:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.selected {
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+.valid-move {
+  position: relative;
+}
+
+.valid-move-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(13, 14, 13, 0.5);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.piece {
+  font-size: 32px;
+  user-select: none;
+  z-index: 2;
 }
 
 .labels.ranks {
@@ -51,16 +70,13 @@
   text-align: right;
 }
 
-.square.selected {
-  background-color: rgba(255, 255, 0, 0.5);
-}
-
-.square:hover {
-  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-}
-
-.piece {
-  user-select: none;
+.labels.files {
+  display: flex;
+  width: 400px;
+  justify-content: space-around;
+  margin-top: 5px;
+  font-size: 14px;
+  text-align: center;
 }
 
 .error {
@@ -98,4 +114,13 @@
 .dark .error,
 .dark .status {
   color: #fff;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f;
+  }
+  to {
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 25px #00f, 0 0 30px #00f;
+  }
 }

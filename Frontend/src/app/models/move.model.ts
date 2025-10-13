@@ -6,7 +6,7 @@ export interface Move {
   pieceMoved?: string;
   fromSquare?: string;
   toSquare?: string;
-  capturedPiece?: string;
+  capturedPiece?: string | null;
   timeStamp: Date;
-  resultingFEN?: string;
+  ResultingFEN?: string;
 }

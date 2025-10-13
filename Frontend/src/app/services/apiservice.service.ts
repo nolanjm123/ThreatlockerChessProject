@@ -46,8 +46,8 @@ export class ApiService {
     return this.http.get<Move[]>(`${this.baseUrl}/match/${matchId}/moves`);
   }
 
-  sendMove(matchId: number, move: { fromSquare: string; toSquare: string; promotion?: string, playerID: number}): Observable<Move> {
-    return this.http.post<Move>(`${this.baseUrl}/move`, { matchId, ...move });
+  sendMove(matchId: number, move: Move): Observable<{ moveID: number }> {
+    return this.http.post<{ moveID: number }>(`${this.baseUrl}/move`, move);
   }
 
   updateMatchWinner(matchId: number, winnerId: number): Observable<void> {

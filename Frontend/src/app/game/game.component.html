@@ -1,0 +1,32 @@
+<div class="top-bar">
+  <button class="icon-btn back-btn" (click)="backToMenu()" title="Back to Menu">
+    <img src="assets/back_arrow.svg" alt="Back to Menu"/>
+  </button>
+  <div class="top-right-icons">
+    <button class="icon-btn" title="Settings">
+      <img src="assets/settings.svg" alt="Settings" />
+    </button>
+    <button class="icon-btn" title="User">
+      <img src="assets/user_icon.svg" alt="User" />
+    </button>
+  </div>
+</div>
+<div class="game-container">
+  <app-player-management
+    [player1]="player1"
+    [player2]="player2"
+    (playerIdsResolved)="onPlayerIdsResolved($event)"
+    (error)="onError($event)"
+  ></app-player-management>
+  <app-chess-board
+    [currentMatchId]="currentMatchId"
+    [player1Id]="player1Id"
+    [player2Id]="player2Id"
+    [player1]="player1"
+    [player2]="player2"
+    (statusChange)="onStatusChange($event)"
+    [currentTheme]="currentTheme"
+    (themeChange)="onThemeChange($event)"
+  ></app-chess-board>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</div>

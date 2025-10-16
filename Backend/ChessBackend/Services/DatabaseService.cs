@@ -279,8 +279,7 @@ namespace ChessBackend.Services
 
             int resultCode = (int)resultCodeParam.Value;
 
-            // If success, return move ID; otherwise, return error code directly
-            return resultCode == 0 ? (int)moveIdParam.Value : resultCode;
+            return resultCode;
         }
 
 
@@ -304,29 +303,62 @@ namespace ChessBackend.Services
 
             conn.Open();
 
-            using SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            using (SqlDataReader reader = cmd.ExecuteReader())
             {
-                moves.Add(new Move
+                while (reader.Read())
                 {
-                    MoveID = (int)reader["MoveID"],
-                    MatchID = (int)reader["MatchID"],
-                    MoveNumber = (int)reader["MoveNumber"],
-                    PlayerID = (int)reader["PlayerID"],
-                    PieceMoved = reader["PieceMoved"] as string,
-                    FromSquare = reader["FromSquare"] as string,
-                    ToSquare = reader["ToSquare"] as string,
-                    CapturedPiece = reader["CapturedPiece"] as string,
-                    TimeStamp = (DateTime)reader["Timestamp"],
-                    ResultingFEN = reader["ResultingFEN"] as string
-                });
+                    moves.Add(new Move
+                    {
+                        MoveID = reader["MoveID"] == DBNull.Value ? 0 : (int)reader["MoveID"],
+                        MatchID = reader["MatchID"] == DBNull.Value ? 0 : (int)reader["MatchID"],
+                        MoveNumber = reader["MoveNumber"] == DBNull.Value ? 0 : (int)reader["MoveNumber"],
+                        PlayerID = reader["PlayerID"] == DBNull.Value ? 0 : (int)reader["PlayerID"],
+                        PieceMoved = reader["PieceMoved"] as string ?? "",
+                        FromSquare = reader["FromSquare"] as string ?? "",
+                        ToSquare = reader["ToSquare"] as string ?? "",
+                        CapturedPiece = reader["CapturedPiece"] as string ?? "",
+                        TimeStamp = reader["Timestamp"] == DBNull.Value ? DateTime.UtcNow : (DateTime)reader["Timestamp"],  // Default if null; fix column name if needed
+                        ResultingFEN = reader["ResultingFEN"] as string ?? ""
+                    });
+                }
             }
 
-            int resultCode = (int)resultCodeParam.Value;
+            object resultCodeObj = resultCodeParam.Value;
+            int resultCode = (resultCodeObj == DBNull.Value || resultCodeObj == null) ? 0 : (int)resultCodeObj;  // Default to 0 (success) if unset/DBNull
 
-            if (resultCode == 1) { return new List<Move>(); };
+            if (resultCode != 0)
+            {
+                Console.WriteLine($"GetMovesForMatch: SP error ResultCode {resultCode} for MatchID {matchId}. Returning empty list.");
+                return new List<Move>();
+            }
 
+            Console.WriteLine($"GetMovesForMatch: Returned {moves.Count} moves for MatchID {matchId}");
             return moves;
+        }
+
+        public int UpdateMatchFenAndStatus(int matchId, string newFen, bool isGameOver, int? winnerId)
+        {
+            using SqlConnection conn = new SqlConnection(_connectionString);
+            using SqlCommand cmd = new SqlCommand("UpdateMatchFenAndStatus", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@MatchID", matchId);
+            cmd.Parameters.AddWithValue("@CurrentFEN", newFen);
+            cmd.Parameters.AddWithValue("@EndTime", isGameOver ? (object)DateTime.UtcNow : DBNull.Value);
+            cmd.Parameters.AddWithValue("@WinnerID", winnerId.HasValue ? (object)winnerId.Value : DBNull.Value);
+
+            SqlParameter resultCodeParam = new SqlParameter("@ResultCode", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(resultCodeParam);
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
+
+            return (int)resultCodeParam.Value;
         }
 
 

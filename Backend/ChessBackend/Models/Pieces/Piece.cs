@@ -25,11 +25,11 @@
 
         protected Piece()
         {
-            Position = (-1,-1);
+            Position = (-1, -1);
             HasMoved = false;
         }
 
-        public bool IsOpponent(Piece? other)
+        public bool IsOpponent(Piece other)
         {
             return other != null && this.Color != other.Color;
         }

@@ -1,21 +1,73 @@
-﻿using ChessBackend.Models;
-using ChessBackend.Models.Pieces;
-using System.Text;
+﻿using ChessBackend.Models.Pieces;
+using ChessBackend.Models;
+using ChessDotNet;
 
 namespace ChessBackend.Utils
 {
     public static class FENUtility
     {
-        public static string GenerateFEN(Board board)
+        public static Board FenToBoard(string fen)
         {
-            StringBuilder fen = new();
+            var game = new ChessGame(fen);
+            var board = new Board();
 
-            for (int rank = 7; rank >= 0; rank--)
+            for (int rank = 0; rank < 8; rank++)  // rank here is board row: 0 = rank8, 7 = rank1
             {
+                for (int file = 0; file < 8; file++)
+                {
+                    // ChessDotNet: File A=0...H=7, Rank 8...1
+                    var fileEnum = (ChessDotNet.File)file;  // Fixed: 0=A, not +1
+                    var chessRank = 8 - rank;  // For row 0 -> rank 8
+                    var position = new Position(fileEnum, chessRank);
+
+                    var piece = game.GetPieceAt(position);
+                    if (piece != null)
+                    {
+                        var fenChar = piece.GetFenCharacter();  // 'P','p','N','n' etc.
+                        var pieceType = GetPieceType(fenChar);
+                        var pieceColor = char.IsUpper(fenChar) ? PieceColor.White : PieceColor.Black;
+
+                        ChessBackend.Models.Pieces.Piece newPiece = pieceType switch
+                        {
+                            PieceType.Pawn => new Pawn(pieceColor) { Position = (file, rank) },
+                            PieceType.Knight => new Knight(pieceColor) { Position = (file, rank) },
+                            PieceType.Bishop => new Bishop(pieceColor) { Position = (file, rank) },
+                            PieceType.Rook => new Rook(pieceColor) { Position = (file, rank) },
+                            PieceType.Queen => new Queen(pieceColor) { Position = (file, rank) },
+                            PieceType.King => new King(pieceColor) { Position = (file, rank) },
+                            _ => throw new InvalidOperationException("Unknown piece type")
+                        };
+                        board.SetPiece((file, rank), newPiece);  // rank inverted consistently
+                    }
+                }
+            }
+            return board;
+        }
+
+        private static PieceType GetPieceType(char pieceChar)
+        {
+            return char.ToUpper(pieceChar) switch
+            {
+                'P' => PieceType.Pawn,
+                'N' => PieceType.Knight,
+                'B' => PieceType.Bishop,
+                'R' => PieceType.Rook,
+                'Q' => PieceType.Queen,
+                'K' => PieceType.King,
+                _ => throw new ArgumentException("Unknown piece character")
+            };
+        }
+
+        public static string BoardToFen(Board board, GameState state)
+        {
+            var ranks = new string[8];
+            for (int rank = 0; rank < 8; rank++)
+            {
+                var fenRank = "";
                 int emptyCount = 0;
                 for (int file = 0; file < 8; file++)
                 {
-                    var piece = board.Squares[file, rank];
+                    var piece = board.GetPiece((file, rank));
                     if (piece == null)
                     {
                         emptyCount++;
@@ -24,94 +76,40 @@ namespace ChessBackend.Utils
                     {
                         if (emptyCount > 0)
                         {
-                            fen.Append(emptyCount);
+                            fenRank += emptyCount.ToString();
                             emptyCount = 0;
                         }
-                        fen.Append(GetFenChar(piece));
-                    }
-                }
-
-                if (emptyCount > 0)
-                    fen.Append(emptyCount);
-
-                if (rank > 0)
-                    fen.Append('/');
-            }
-
-            // For now, we’ll keep the rest simple:
-            fen.Append(" w KQkq - 0 1");
-            return fen.ToString();
-        }
-
-        private static char GetFenChar(Piece piece)
-        {
-            char symbol = piece.Type switch
-            {
-                PieceType.Pawn => 'p',
-                PieceType.Knight => 'n',
-                PieceType.Bishop => 'b',
-                PieceType.Rook => 'r',
-                PieceType.Queen => 'q',
-                PieceType.King => 'k',
-                _ => '?'
-            };
-
-            return piece.Color == PieceColor.White ? char.ToUpper(symbol) : symbol;
-        }
-
-
-        public static Board GenerateBoard(string fen)
-        {
-            var board = new Board();
-
-            // Clear the board first
-            for (int file = 0; file < 8; file++)
-                for (int rank = 0; rank < 8; rank++)
-                    board.Squares[file, rank] = null;
-
-            string[] parts = fen.Split(' ');
-            string[] rows = parts[0].Split('/');
-
-            for (int rank = 7; rank >= 0; rank--) // FEN starts from rank 8 to 1
-            {
-                int file = 0;
-                foreach (char c in rows[7 - rank])
-                {
-                    if (char.IsDigit(c))
-                    {
-                        file += (int)char.GetNumericValue(c);
-                    }
-                    else
-                    {
-                        var piece = CharToPiece(c);
-                        if (piece != null)
+                        var pieceChar = piece.Type switch
                         {
-                            piece.Position = (file, rank);
-                            board.Squares[file, rank] = piece;
-                            file++;
-                        }
+                            PieceType.Pawn => 'P',
+                            PieceType.Knight => 'N',
+                            PieceType.Bishop => 'B',
+                            PieceType.Rook => 'R',
+                            PieceType.Queen => 'Q',
+                            PieceType.King => 'K',
+                            _ => throw new ArgumentException("Unknown piece type")
+                        };
+                        fenRank += piece.Color == PieceColor.White ? pieceChar : char.ToLower(pieceChar);
                     }
                 }
+                if (emptyCount > 0)
+                {
+                    fenRank += emptyCount.ToString();
+                }
+                ranks[rank] = fenRank;
             }
 
-            return board;
-        }
+            var position = string.Join("/", ranks);
 
-        private static Piece? CharToPiece(char c)
-        {
-            PieceColor color = char.IsUpper(c) ? PieceColor.White : PieceColor.Black;
-            char lower = char.ToLower(c);
+            // Parse CurrentFEN for additional components
+            var fenParts = state.CurrentFEN.Split(' ');
+            string activeColor = fenParts.Length > 1 ? fenParts[1] : "w";
+            string castling = fenParts.Length > 2 ? fenParts[2] : "KQkq";
+            string enPassant = fenParts.Length > 3 ? fenParts[3] : "-";
+            string halfmove = fenParts.Length > 4 ? fenParts[4] : "0";
+            string fullmove = fenParts.Length > 5 ? fenParts[5] : "1";
 
-            return lower switch
-            {
-                'p' => new Pawn(color),
-                'n' => new Knight(color),
-                'b' => new Bishop(color),
-                'r' => new Rook(color),
-                'q' => new Queen(color),
-                'k' => new King(color),
-                _ => null
-            };
+            return $"{position} {activeColor} {castling} {enPassant} {halfmove} {fullmove}";
         }
     }
 }

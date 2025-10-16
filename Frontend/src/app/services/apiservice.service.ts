@@ -9,55 +9,65 @@ import { Move } from '../models/move.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://localhost:7020/api/database'; // your backend base URL
+  private baseUrl = 'https://localhost:7020/api/chess';
+  private databaseUrl = 'https://localhost:7020/api/database';
 
   constructor(private http: HttpClient) {}
 
   // Players
   getPlayer(id: number): Observable<Player> {
-    return this.http.get<Player>(`${this.baseUrl}/player/${id}`);
+    return this.http.get<Player>(`${this.databaseUrl}/player/${id}`);
   }
 
   getPlayers(): Observable<Player[]> {
-    return this.http.get<Player[]>(`${this.baseUrl}/players`);
+    return this.http.get<Player[]>(`${this.databaseUrl}/players`);
   }
 
   createPlayer(name: string): Observable<{ playerID: number }> {
-    return this.http.post<{ playerID: number }>(`${this.baseUrl}/player?name=${encodeURIComponent(name)}`, {});
+    return this.http.post<{ playerID: number }>(`${this.databaseUrl}/player?name=${encodeURIComponent(name)}`, {});
   }
 
   // Matches
   getMatch(matchId: number): Observable<Match> {
-    return this.http.get<Match>(`${this.baseUrl}/match/${matchId}`); // NEED TO ADD MATCHID AT END OF URL
+    return this.http.get<Match>(`${this.databaseUrl}/match/${matchId}`); // NEED TO ADD MATCHID AT END OF URL
   }
 
   getMatches(): Observable<Match[]> {
-    return this.http.get<Match[]>(`${this.baseUrl}/matches`);
+    return this.http.get<Match[]>(`${this.databaseUrl}/matches`);
   }
 
   createMatch(player1Id: number, player2Id: number): Observable<{ matchID: number }> {
     return this.http.post<{ matchID: number }>(
-      `${this.baseUrl}/match?player1Id=${player1Id}&player2Id=${player2Id}`,
+      `${this.databaseUrl}/match?player1Id=${player1Id}&player2Id=${player2Id}`,
       {}
     );
   }
 
   getMovesForMatch(matchId: number): Observable<Move[]> {
-    return this.http.get<Move[]>(`${this.baseUrl}/match/${matchId}/moves`);
+    return this.http.get<Move[]>(`${this.databaseUrl}/match/${matchId}/moves`);
   }
 
-  sendMove(matchId: number, move: Move): Observable<{ moveID: number }> {
-    return this.http.post<{ moveID: number }>(`${this.baseUrl}/move`, move);
+  getValidMoves(matchId: number, square: string): Observable<{ rank: number; file: number }[]> {
+    return this.http.get<{ rank: number; file: number }[]>(`${this.baseUrl}/${matchId}/moves/valid/${square}`);
+  }
+
+  sendMove(moveRequest: { matchId: number; playerId: number; fromSquare: string; toSquare: string; promotion: string | null }): Observable<{ newFEN: string; status: string }> {
+    return this.http.post<{ newFEN: string; status: string }>(`${this.baseUrl}/${moveRequest.matchId}/moves`, {
+      playerID: moveRequest.playerId,
+      fromSquare: moveRequest.fromSquare,
+      toSquare: moveRequest.toSquare,
+      promotion: moveRequest.promotion
+    });
   }
 
   updateMatchWinner(matchId: number, winnerId: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/match/${matchId}/winner`, null, {
+    return this.http.post<void>(`${this.databaseUrl}/match/${matchId}/winner`, null, {
       params: { winnerId }
     });
   }
 
   // Leaderboard
   getLeaderboard(): Observable<Player[]> {
-    return this.http.get<Player[]>(`${this.baseUrl}/leaderboard`);
+    return this.http.get<Player[]>(`${this.databaseUrl}/leaderboard`);
   }
 }

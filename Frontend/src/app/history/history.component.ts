@@ -64,12 +64,21 @@ export class HistoryPage implements OnInit {
   }
 
   handleMatchClick(match: Match) {
-    if (match.endTime) {
-      alert(`Viewing play-by-play for match ${match.matchID}`);
-    } else {
-      alert(`Resuming match ${match.matchID}`);
-    }
+  if (match.endTime) {
+    alert(`Viewing play-by-play for match ${match.matchID}`);
+    // TODO: Implement navigation to a replay
+  } else {
+    this.router.navigate(['/game'], {
+      state: {
+        matchID: match.matchID,
+        player1: this.getPlayerName(match.player1ID),
+        player2: this.getPlayerName(match.player2ID),
+        player1Id: match.player1ID,
+        player2Id: match.player2ID
+      }
+    });
   }
+}
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: MouseEvent) {

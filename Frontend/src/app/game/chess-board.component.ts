@@ -190,14 +190,15 @@ export class ChessBoardComponent implements OnInit {
     return pieces[piece] || '';
   }
 
-  private updateBoard(): void {
+  public updateBoard(): void {
     this.fen = this.fenHelper.getFen();
     this.board = this.fenHelper.getBoard();
     console.log('Updated FEN:', this.fen);
     console.log('Updated board state:', this.board);
+    this.cdr.detectChanges();
   }
 
-  private updateStatus(newStatus?: string): void {
+  public updateStatus(newStatus?: string): void {
     if (newStatus) {
       this.status = newStatus;
       this.statusChange.emit(newStatus);

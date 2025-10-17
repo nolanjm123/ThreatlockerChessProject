@@ -54,6 +54,20 @@ h2 {
   }
 }
 
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+}
+
+
 
 
 .modal-overlay {

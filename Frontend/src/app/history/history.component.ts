@@ -50,7 +50,7 @@ export class HistoryPage implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('\n\n\nNOTICE MEEEEEEEE\n\n');
+    console.log('\nNavigated to History\n\n');
     this.fetchMatches();
     this.fetchLeaderboard();
   }

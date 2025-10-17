@@ -146,7 +146,6 @@ namespace ChessBackend.Services
                     isGameOver = true;
                 }
 
-                // Use the pre-computed values
                 var moveModel = new ChessBackend.Models.Move
                 {
                     MatchID = matchId,
@@ -154,7 +153,7 @@ namespace ChessBackend.Services
                     PlayerID = playerId,
                     FromSquare = fromSquare,
                     ToSquare = toSquare,
-                    PieceMoved = pieceMoved,  // Now "P" or "Q", etc.
+                    PieceMoved = pieceMoved,
                     CapturedPiece = capturedPiece,
                     TimeStamp = DateTime.UtcNow,
                     ResultingFEN = newFen
@@ -198,7 +197,7 @@ namespace ChessBackend.Services
         private string GetFENFromPieceType(ChessDotNet.Piece piece, ChessDotNet.Player currentPlayer)
         {
             if (piece == null) return "";
-            return piece.GetFenCharacter().ToString();  // Handles case automatically
+            return piece.GetFenCharacter().ToString();
         }
     }
 }

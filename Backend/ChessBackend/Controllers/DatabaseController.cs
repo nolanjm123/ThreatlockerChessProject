@@ -61,9 +61,6 @@ namespace ChessBackend.Controllers
         [HttpPost("match")]
         public IActionResult CreateMatch([FromQuery] int player1Id, [FromQuery] int player2Id)
         {
-            //int matchId = _dbService.CreateMatch(player1Id, player2Id);
-            //return Ok(new { MatchID = matchId });
-
             int result = _dbService.CreateMatch(player1Id, player2Id);
             switch (result) {
                 case 0: return StatusCode(500);

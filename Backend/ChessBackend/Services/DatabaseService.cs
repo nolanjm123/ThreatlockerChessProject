@@ -317,14 +317,14 @@ namespace ChessBackend.Services
                         FromSquare = reader["FromSquare"] as string ?? "",
                         ToSquare = reader["ToSquare"] as string ?? "",
                         CapturedPiece = reader["CapturedPiece"] as string ?? "",
-                        TimeStamp = reader["Timestamp"] == DBNull.Value ? DateTime.UtcNow : (DateTime)reader["Timestamp"],  // Default if null; fix column name if needed
+                        TimeStamp = reader["Timestamp"] == DBNull.Value ? DateTime.UtcNow : (DateTime)reader["Timestamp"],
                         ResultingFEN = reader["ResultingFEN"] as string ?? ""
                     });
                 }
             }
 
             object resultCodeObj = resultCodeParam.Value;
-            int resultCode = (resultCodeObj == DBNull.Value || resultCodeObj == null) ? 0 : (int)resultCodeObj;  // Default to 0 (success) if unset/DBNull
+            int resultCode = (resultCodeObj == DBNull.Value || resultCodeObj == null) ? 0 : (int)resultCodeObj;
 
             if (resultCode != 0)
             {

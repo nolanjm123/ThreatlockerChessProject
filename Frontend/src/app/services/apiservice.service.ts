@@ -29,7 +29,7 @@ export class ApiService {
 
   // Matches
   getMatch(matchId: number): Observable<Match> {
-    return this.http.get<Match>(`${this.databaseUrl}/match/${matchId}`); // NEED TO ADD MATCHID AT END OF URL
+    return this.http.get<Match>(`${this.databaseUrl}/match/${matchId}`);
   }
 
   getMatches(): Observable<Match[]> {

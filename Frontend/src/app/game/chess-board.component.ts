@@ -50,6 +50,7 @@ export class ChessBoardComponent implements OnInit {
   @Input() player1: string = '';
   @Input() player2: string = '';
   @Input() currentTheme: string = 'default';
+  @Input() isReplayMode: boolean = false;
   @Output() statusChange = new EventEmitter<string>();
   @Output() themeChange = new EventEmitter<string>();
 
@@ -105,6 +106,11 @@ export class ChessBoardComponent implements OnInit {
   }
 
   onSquareClick(rank: number, file: number): void {
+
+    if (this.isReplayMode) {
+    return;
+    }
+
     if (!this.currentMatchId) {
       this.errorMessage = 'No match selected';
       this.cdr.detectChanges();
@@ -208,8 +214,24 @@ export class ChessBoardComponent implements OnInit {
     const status = this.fenHelper.getGameStatus();
     let computedStatus: string;
     if (status.inCheckmate) {
-      computedStatus = `Checkmate! ${status.activeColor === 'w' ? this.player2 : this.player1} wins!`;
-    } else if (status.inStalemate) {
+    const winnerId = status.activeColor === 'w' ? this.player2Id : this.player1Id;
+    const winnerName = status.activeColor === 'w' ? this.player2 : this.player1;
+
+    computedStatus = `Checkmate! ${winnerName} wins!`;
+
+    if (this.currentMatchId) {
+      this.apiService.updateMatchWinner(this.currentMatchId, winnerId).subscribe({
+        next: () => {
+          console.log(`✅ Match ${this.currentMatchId} updated with winner: ${winnerName} (ID ${winnerId})`);
+        },
+        error: (err) => {
+          console.error(`Failed to update match winner:`, err);
+          this.errorMessage = 'Failed to update match result.';
+          this.cdr.detectChanges();
+        },
+      });
+    }
+  } else if (status.inStalemate) {
       computedStatus = 'Stalemate! Game over.';
     } else if (status.inDraw) {
       computedStatus = 'Draw! Game over.';

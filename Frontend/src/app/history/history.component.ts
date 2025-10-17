@@ -65,17 +65,26 @@ export class HistoryPage implements OnInit {
 
   handleMatchClick(match: Match) {
   if (match.endTime) {
-    alert(`Viewing play-by-play for match ${match.matchID}`);
-    // TODO: Implement navigation to a replay
+    // Replay Page
+    this.router.navigate(['/replay'], {
+      state: {
+        matchID: match.matchID,
+        player1: this.getPlayerName(match.player1ID),
+        player2: this.getPlayerName(match.player2ID),
+        player1Id: match.player1ID,
+        player2Id: match.player2ID,
+      },
+    });
   } else {
+    // Resume in-progress match
     this.router.navigate(['/game'], {
       state: {
         matchID: match.matchID,
         player1: this.getPlayerName(match.player1ID),
         player2: this.getPlayerName(match.player2ID),
         player1Id: match.player1ID,
-        player2Id: match.player2ID
-      }
+        player2Id: match.player2ID,
+      },
     });
   }
 }

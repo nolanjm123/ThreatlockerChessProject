@@ -1,0 +1,34 @@
+<div class="top-bar">
+  <button class="icon-btn back-btn" (click)="backToMenu()" title="Back to Menu">
+    <img src="assets/back_arrow.svg" alt="Back to Menu"/>
+  </button>
+  <div class="top-right-icons">
+    <button class="icon-btn" title="Settings">
+      <img src="assets/settings.svg" alt="Settings" />
+    </button>
+    <button class="icon-btn" title="User">
+      <img src="assets/user_icon.svg" alt="User" />
+    </button>
+  </div>
+</div>
+
+
+<div class="replay-container">
+  <h2>{{ player1 }} vs {{ player2 }}</h2>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <app-chess-board
+    [currentMatchId]="matchID"
+    [player1Id]="player1Id"
+    [player2Id]="player2Id"
+    [player1]="player1"
+    [player2]="player2"
+    [currentTheme]="currentTheme"
+    [isReplayMode]="true"
+    (themeChange)="onThemeChange($event)"
+  ></app-chess-board>
+  <div class="navigation-controls">
+    <button (click)="goToPrevious()" [disabled]="currentMoveIndex === -1">Back</button>
+    <div class="move-info">{{ status }}</div>
+    <button (click)="goToNext()" [disabled]="currentMoveIndex >= moves.length - 1">Forward</button>
+  </div>
+</div>

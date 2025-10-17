@@ -1,4 +1,4 @@
-﻿namespace ChessBackend.Models.Pieces
+namespace ChessBackend.Models.Pieces
 {
     public class Board
     {

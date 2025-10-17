@@ -9,8 +9,8 @@ import { Move } from '../models/move.model';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://localhost:7020/api/chess';
-  private databaseUrl = 'https://localhost:7020/api/database';
+  private baseUrl = '/api/chess';
+  private databaseUrl = '/api/database';
 
   constructor(private http: HttpClient) {}
 

@@ -176,13 +176,6 @@ namespace ChessBackend.Services
                     WinnerID = winnerId
                 };
 
-                //int updateResult = _dbService.UpdateMatchFenAndStatus(matchId, newFen, isGameOver, winnerId);
-                //if (updateResult != 0)
-                //{
-                //    Console.WriteLine($"MakeMove: Failed to update match, result: {updateResult}");
-                //    return (null, updateResult);
-                //}
-
                 return (newFen, 0);
             }
             catch (Exception ex)

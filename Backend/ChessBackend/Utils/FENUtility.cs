@@ -1,4 +1,4 @@
-﻿using ChessBackend.Models.Pieces;
+using ChessBackend.Models.Pieces;
 using ChessBackend.Models;
 using ChessDotNet;
 

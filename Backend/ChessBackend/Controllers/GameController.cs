@@ -1,4 +1,4 @@
-﻿using ChessBackend.Models;
+using ChessBackend.Models;
 using ChessBackend.Services;
 using Microsoft.AspNetCore.Mvc;
 

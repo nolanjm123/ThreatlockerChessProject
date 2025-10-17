@@ -11,7 +11,7 @@ namespace ChessBackend.Services
 
         public DatabaseService(IConfiguration config)
         {
-            _connectionString = config.GetConnectionString("ChessDB");
+            _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
         // -------------------- Players --------------------
